@@ -7,7 +7,7 @@ public class User implements Serializable {
     private String name;
     private String email;
     private String contact;
-    private int age;
+    private String image;
 
     public User() {
     }
@@ -41,11 +41,11 @@ public class User implements Serializable {
         this.contact = contact;
     }
 
-    public int getAge() {
-        return age;
+    public String getImage() {
+        return image;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setImage(String image) {
+        this.image = image;
     }
 }

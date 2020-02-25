@@ -6,8 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardElevation="4dp"
     app:cardCornerRadius="4dp"
-    android:layout_marginBottom="2dp"
-    android:layout_marginStart="2dp">
+    android:layout_marginBottom="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,13 +14,7 @@
         android:padding="10dp"
         >
 
-        <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:id="@+id/image"/>
-
         <LinearLayout
-            android:layout_marginStart="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -30,15 +23,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:id="@+id/name"
+                android:textSize="18sp"
+                android:id="@+id/title"
                 android:text="Name"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/email"
+                android:id="@+id/body"
                 android:text="Email"
                 android:textStyle="italic" />
 

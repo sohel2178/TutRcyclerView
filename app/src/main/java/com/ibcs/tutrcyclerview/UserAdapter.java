@@ -5,12 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ibcs.tutrcyclerview.models.User;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,22 +90,29 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserHolder> {
     class UserHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView tvName,tvEmail;
-        Button btnDelete;
+        ImageView ivImage;
 
         public UserHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.name);
             tvEmail = itemView.findViewById(R.id.email);
-            btnDelete = itemView.findViewById(R.id.delete);
+            ivImage = itemView.findViewById(R.id.image);
 
             itemView.setOnClickListener(this);
-            btnDelete.setOnClickListener(this);
 
         }
 
         public void bind(User user){
             tvName.setText(user.getName());
             tvEmail.setText(user.getEmail());
+
+            if(!user.getImage().equals("")){
+                Picasso.get()
+                        .load(user.getImage())
+                        .into(ivImage);
+            }
+
+
         }
 
         @Override
@@ -111,11 +120,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserHolder> {
             if(v==itemView){
                 User user = userList.get(getAdapterPosition());
                 handler.onItemClick(user);
-            }else if(v==btnDelete){
-                handler.onDeleteClick(getAdapterPosition());
             }
-
-
         }
     }
 }
