@@ -66,7 +66,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserHolder> {
       int position = getPosition(user);
 
       if(position!=-1){
-          notifyItemRemoved(position);
+          removeUser(position);
       }
     }
 
@@ -78,7 +78,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserHolder> {
 
     private int getPosition(User user){
         for (User x:userList){
-            if(x.getName().equals(user.getName()) && x.getEmail().equals(user.getEmail())){
+            if(x.get_id().equals(user.get_id())){
                 return userList.indexOf(x);
             }
         }
@@ -90,15 +90,21 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserHolder> {
     class UserHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView tvName,tvEmail;
-        ImageView ivImage;
+        ImageView ivImage,ivDelete;
+
+        Button btnEdit;
 
         public UserHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.name);
             tvEmail = itemView.findViewById(R.id.email);
             ivImage = itemView.findViewById(R.id.image);
+            btnEdit = itemView.findViewById(R.id.edit);
+            ivDelete = itemView.findViewById(R.id.delete);
 
             itemView.setOnClickListener(this);
+            btnEdit.setOnClickListener(this);
+            ivDelete.setOnClickListener(this);
 
         }
 
@@ -120,6 +126,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserHolder> {
             if(v==itemView){
                 User user = userList.get(getAdapterPosition());
                 handler.onItemClick(user);
+            }else if(v==btnEdit){
+                User user = userList.get(getAdapterPosition());
+                handler.onEditClick(user);
+            }else if(v==ivDelete){
+                User user = userList.get(getAdapterPosition());
+                handler.onDeleteClick(user);
             }
         }
     }

@@ -22,6 +22,7 @@ import com.ibcs.tutrcyclerview.api.ServiceGenerator;
 import com.ibcs.tutrcyclerview.models.Post;
 import com.ibcs.tutrcyclerview.models.Repo;
 import com.ibcs.tutrcyclerview.models.User;
+import com.ibcs.tutrcyclerview.ui.AddPostActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +33,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity implements UserClickHandler {
+public class MainActivity extends AppCompatActivity implements UserClickHandler, View.OnClickListener {
 
     private static final int REQUEST_CODE=50000;
 
     private RecyclerView recyclerView;
-    private Button btnAddUser;
+    private Button btnAddPost;
 
     private UserAdapter adapter;
 
@@ -55,54 +56,40 @@ public class MainActivity extends AppCompatActivity implements UserClickHandler 
         adapter = new UserAdapter(this,this);
 
         recyclerView = findViewById(R.id.recyclerview);
-        GridLayoutManager manager = new GridLayoutManager(this,2);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
 
+        btnAddPost = findViewById(R.id.add_post);
+
+        btnAddPost.setOnClickListener(this);
 
         ApiClient client = ServiceGenerator.createService(ApiClient.class);
 
-
-        client.getUser("sumonrang03@gmail.com")
-                .enqueue(new Callback<User>() {
+        client.getAllUsers()
+                .enqueue(new Callback<List<User>>() {
                     @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
+                    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                         if(response.isSuccessful()){
-                            User user = response.body();
-                            adapter.addUser(user);
+                            List<User> userList = response.body();
+
+                            for(User user: userList){
+                                adapter.addUser(user);
+                            }
+
+
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<User> call, Throwable t) {
+                    public void onFailure(Call<List<User>> call, Throwable t) {
 
                     }
                 });
 
-//        client.getAllUsers()
-//                .enqueue(new Callback<List<User>>() {
-//                    @Override
-//                    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-//                        if(response.isSuccessful()){
-//                            List<User> userList = response.body();
-//
-//                            for(User user: userList){
-//                                adapter.addUser(user);
-//                            }
-//
-//
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<List<User>> call, Throwable t) {
-//
-//                    }
-//                });
-
 //        PlaceHolderService placeHolderService = ServiceGenerator.createService(PlaceHolderService.class);
 //
-//        placeHolderService.getAllPost()
+//        client.getAllPost()
 //                .enqueue(new Callback<List<Post>>() {
 //                    @Override
 //                    public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
@@ -120,16 +107,16 @@ public class MainActivity extends AppCompatActivity implements UserClickHandler 
 //
 //                    }
 //                });
+
+//        btnAddUser = findViewById(R.id.add_user);
+//        btnAddUser.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(),AddUserActivity.class);
+//                startActivityForResult(intent,REQUEST_CODE);
 //
-////        btnAddUser = findViewById(R.id.add_user);
-////        btnAddUser.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View v) {
-////                Intent intent = new Intent(getApplicationContext(),AddUserActivity.class);
-////                startActivityForResult(intent,REQUEST_CODE);
-////
-////            }
-////        });
+//            }
+//        });
     }
 
     @Override
@@ -159,9 +146,28 @@ public class MainActivity extends AppCompatActivity implements UserClickHandler 
     }
 
     @Override
-    public void onDeleteClick(final int position) {
+    public void onDeleteClick(final User user) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        ApiClient client = ServiceGenerator.createService(ApiClient.class);
+
+        client.deleteUser(user.get_id())
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if(response.isSuccessful()){
+                            Log.d("YYYYY","User Deleted");
+
+                            adapter.removeUser(user);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Log.d("YYYYY","Error "+t.getMessage());
+                    }
+                });
+
+        /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Do You Want to Delete This User??")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -180,6 +186,19 @@ public class MainActivity extends AppCompatActivity implements UserClickHandler 
         alertDialog.setCancelable(false);
         alertDialog.show();
 
-//        adapter.removeUser(position);
+//        adapter.removeUser(position);*/
+    }
+
+    @Override
+    public void onEditClick(User user) {
+        Intent intent = new Intent(this, AddUserActivity.class);
+        intent.putExtra("USER",user);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(this, AddUserActivity.class);
+        startActivity(intent);
     }
 }

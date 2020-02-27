@@ -4,10 +4,12 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
+    private String _id;
     private String name;
     private String email;
     private String contact;
     private String image;
+
 
     public User() {
     }
@@ -47,5 +49,13 @@ public class User implements Serializable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 }

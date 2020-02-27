@@ -19,8 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="add User"
-        android:id="@+id/add_user"/>
+        android:text="add Post"
+        android:id="@+id/add_post"/>
 
 
 </RelativeLayout>
